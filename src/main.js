@@ -1,9 +1,5 @@
-
-// Описаний у документації
 import iziToast from "izitoast";
-// Додатковий імпорт стилів
 import "izitoast/dist/css/iziToast.min.css";
-
 
 import { getImagesByQuery } from './js/pixabay-api';
 import {
@@ -26,9 +22,8 @@ const PER_PAGE = 15;
 form.addEventListener('submit', handleOnSearch);
 loadMoreButton.addEventListener('click', handleOnLoadMore)
 
-function handleOnSearch(event) {
+async function handleOnSearch(event) {
     event.preventDefault();
-
     const query = input.value.trim();
 
     if (!query) {
@@ -48,9 +43,9 @@ function handleOnSearch(event) {
     showLoader();
     hideLoadMoreButton();
 
-    
-    getImagesByQuery(query, currentPage)
-        .then(data => {
+    try {
+        const data = await getImagesByQuery(query, currentPage);
+
             if (data.hits.length === 0) {
                 iziToast.error({
                     title: 'Error',
@@ -62,34 +57,38 @@ function handleOnSearch(event) {
             
             createGallery(data.hits);
 
-            const totalPages = Math.ceil(data.totalHits / PER_PAGE);
-            if (currentPage < totalPages) {
-                showLoadMoreButton();
-            }
-        })
-
-        .catch(error => {
-            console.error(error);
+        const totalPages = Math.ceil(data.totalHits / PER_PAGE);
+        
+            if (currentPage < totalPages) 
+            showLoadMoreButton(); 
+        
+    } catch (error) {
             iziToast.error({
                 title: 'Error',
                 message: 'Something went wrong!',
                 position: 'topRight',
             });
-        })
-        
-        .finally(() => {
+        } finally {
             hideLoader();
-        });
+        };
 }
 
-function handleOnLoadMore() {
+async function handleOnLoadMore() {
     currentPage ++;
     showLoader();
     hideLoadMoreButton();
 
-    getImagesByQuery(currentQuery, currentPage)
-        .then(data => {
-            createGallery(data.hits);
+    try{
+        const data = await getImagesByQuery(currentQuery, currentPage);
+        createGallery(data.hits);
+
+        const { height: cardHeight } = document
+            .querySelector('.gallery li')
+            .getBoundingClientRect();
+        window.scrollBy({
+            top: cardHeight * 2,
+            behavior: 'smooth',
+        });
 
             const totalPages = Math.ceil(data.totalHits / PER_PAGE);
 
@@ -103,15 +102,13 @@ function handleOnLoadMore() {
             } else {
                 showLoadMoreButton();
             }
-        })
-        .catch(() => {
+        } catch (error) {
             iziToast.error({
                 title: 'Error',
                 message: 'Something went wrong! while loading more images!',
                 position: 'topRight',
             });
-        })
-        .finally(() => {
+        } finally  {
             hideLoader()
-        });
+        }
 }
