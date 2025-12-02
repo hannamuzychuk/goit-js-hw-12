@@ -50,14 +50,14 @@ body {
   letter-spacing: 0.04em;
   border: none;
   border-radius: 8px;
-  background-color: #4e75ff;;
+  background-color: #4e75ff;
   color: #ffffff;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .form button:hover {
-  background-color:#6c8cff;;
+  background-color:#6c8cff;
 }
 
 .loader {
@@ -87,10 +87,6 @@ body {
   100% {
     transform: rotate(360deg);
   }
-}
-
-.hidden {
-  display: none;
 }
 
 .hidden {
@@ -155,7 +151,7 @@ body {
 }
 
 .load-more-btn:hover {
-  background-color: #3d56d1;
+  background-color: #6c8cff;
   transform: translateY(-2px);
 }
 

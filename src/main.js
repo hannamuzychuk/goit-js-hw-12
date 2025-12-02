@@ -16,11 +16,11 @@ const input = document.querySelector('input[name="search-text"]');
 const loadMoreButton = document.querySelector('.load-more-btn');
 
 let currentPage = 1;
-let currentQuery = "";
+let currentQuery = '';
 const PER_PAGE = 15;
 
 form.addEventListener('submit', handleOnSearch);
-loadMoreButton.addEventListener('click', handleOnLoadMore)
+loadMoreButton.addEventListener('click', handleOnLoadMore);
 
 async function handleOnSearch(event) {
     event.preventDefault();
@@ -32,12 +32,11 @@ async function handleOnSearch(event) {
             message: 'Search field cannot be empty!',
             position: 'topRight',
         });
-        return
+        return;
     }
 
     currentPage = 1;
     currentQuery = query;
-
 
     clearGallery();
     showLoader();
@@ -46,7 +45,7 @@ async function handleOnSearch(event) {
     try {
         const data = await getImagesByQuery(query, currentPage);
 
-            if (data.hits.length === 0) {
+            if (!data.hits.length) {
                 iziToast.error({
                     title: 'Error',
                     message: 'Sorry, there are no images matching your search query. Please try again!',
@@ -58,11 +57,12 @@ async function handleOnSearch(event) {
             createGallery(data.hits);
 
         const totalPages = Math.ceil(data.totalHits / PER_PAGE);
-        
+    
             if (currentPage < totalPages) 
             showLoadMoreButton(); 
         
     } catch (error) {
+        console.error(error);
             iziToast.error({
                 title: 'Error',
                 message: 'Something went wrong!',
@@ -70,11 +70,11 @@ async function handleOnSearch(event) {
             });
         } finally {
             hideLoader();
-        };
+        }
 }
 
 async function handleOnLoadMore() {
-    currentPage ++;
+    currentPage++;
     showLoader();
     hideLoadMoreButton();
 
@@ -82,13 +82,14 @@ async function handleOnLoadMore() {
         const data = await getImagesByQuery(currentQuery, currentPage);
         createGallery(data.hits);
 
-        const { height: cardHeight } = document
-            .querySelector('.gallery li')
-            .getBoundingClientRect();
-        window.scrollBy({
-            top: cardHeight * 2,
-            behavior: 'smooth',
+        const firstCard = document.querySelector('.gallery li');
+        if (firstCard) {
+            const { height: cardHeight } = firstCard.getBoundingClientRect();
+            window.scrollBy({
+                 top: cardHeight * 2,
+                behavior: 'smooth',
         });
+    }
 
             const totalPages = Math.ceil(data.totalHits / PER_PAGE);
 
@@ -102,13 +103,14 @@ async function handleOnLoadMore() {
             } else {
                 showLoadMoreButton();
             }
-        } catch (error) {
+    } catch (error) {
+        console.error(error);
             iziToast.error({
                 title: 'Error',
                 message: 'Something went wrong! while loading more images!',
                 position: 'topRight',
             });
         } finally  {
-            hideLoader()
+        hideLoader();
         }
 }
