@@ -137,3 +137,30 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.load-more-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 28px;
+  background-color: #4e75ff;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #3d56d1;
+  transform: translateY(-2px);
+}
+
+.load-more-btn:active {
+  transform: translateY(0);
+}
+
+.load-more-btn.hidden {
+  display: none;
+}
