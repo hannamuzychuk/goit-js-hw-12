@@ -140,14 +140,16 @@ body {
 
 .load-more-btn {
   display: block;
-  margin: 20px auto;
-  padding: 12px 28px;
+  margin: 32px auto;
+  padding: 8px 16px;
   background-color: #4e75ff;
   color: #ffffff;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
+  line-height: 1.5;
+    letter-spacing: 0.04em;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.25s ease, transform 0.2s ease;
 }
